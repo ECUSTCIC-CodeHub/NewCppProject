@@ -22,3 +22,7 @@ macos
 可选参数参考https://premake.github.io/docs/Using-Premake
 
 随后会生成对应平台的构建文件，按照对应的构建方式进行编译即可
+
+# 当前进展
+auto
+decltype
