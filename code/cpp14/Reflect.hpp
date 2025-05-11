@@ -3,6 +3,7 @@
 #include <tuple>
 #include <utility>
 #include <ostream>
+#include <iostream>
 
 // 基本模板类，保存调用函数信息
 template<typename T>
