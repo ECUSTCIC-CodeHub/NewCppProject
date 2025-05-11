@@ -34,7 +34,8 @@ project("Cpp14")
 
     includedirs {
         "code/cpp14",
-        "code/cpp14/include"
+        "code/cpp14/include",
+        "code/cpp14/utils"
     }
 
     objdir ("bin-int/" .. outputdir .. "/%{prj.name}")

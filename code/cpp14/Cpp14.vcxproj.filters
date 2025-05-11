@@ -4,11 +4,17 @@
     <Filter Include="include">
       <UniqueIdentifier>{89AF369E-F58E-B539-FEA6-40106A051C9B}</UniqueIdentifier>
     </Filter>
+    <Filter Include="utils">
+      <UniqueIdentifier>{169C8510-82B0-ADC1-4B32-5121B705AAF2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Reflect.hpp" />
-    <ClInclude Include="include\auto_.hpp">
+    <ClInclude Include="include\Deduction.hpp">
       <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\PrintType.h">
+      <Filter>utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
