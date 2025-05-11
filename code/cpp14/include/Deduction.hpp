@@ -12,7 +12,7 @@ public:
     void testBaseType()
     {
         std::cout << "----------------" << std::endl;
-        std::cout << "基本类型推导" << std::endl;
+        std::cout << "auto-基本类型推导" << std::endl;
         auto a = 1;     // int
         auto b = 2.f;   // 
         auto c = new int[3] {1, 2, 3}; // int*
@@ -24,7 +24,7 @@ public:
     void testContainer()
     {
         std::cout << "\n----------------" << std::endl;
-        std::cout << "模板类型推导" << std::endl;
+        std::cout << "auto-模板类型推导" << std::endl;
         auto a = { 1, 2, 3 };                   // std::initializer_list<int>
         auto b = std::vector<int>{ 1, 2, 3 };   // std::vector<int>
         auto c = std::map<int, int>{ {1,1} };   // std::map<int, int>
@@ -35,7 +35,7 @@ public:
     void testLambda()
     {
         std::cout << "\n----------------" << std::endl;
-        std::cout << "函数推导" << std::endl;
+        std::cout << "auto-函数推导" << std::endl;
         const int a = 1;
         const int b = 2;
         // lambda本质是一个类
@@ -51,7 +51,7 @@ public:
     void testQualifiers()
     {
         std::cout << "\n----------------" << std::endl;
-        std::cout << "函数修饰符推导" << std::endl;
+        std::cout << "auto-修饰符推导" << std::endl;
         const int tmp_a = 1;
         const int& tmp_b = tmp_a; // int&
         int&& tmp_c = 1;
@@ -89,36 +89,74 @@ public:
     void testReference()
     {
         std::cout << "----------------" << std::endl;
-        std::cout << "decltype推导" << std::endl;
-        int a = 1;
-        decltype(a) b = a; // int
-        decltype((a)) c = a; // int&，括号表达式为左值
-        decltype((a + 1)) d = a; // int&，括号内为什么运算式，计算后为右值，decltype推导右值类型为什么实际类型
+        std::cout << "decltype-基础类型推导" << std::endl;
+        int var = 1;
+        decltype(var)       b = var; // int
+        decltype((var))     c = var; // int&，括号表达式为左值
+        decltype((var + 1)) d = var; // int&，括号内为运算式，计算后为右值，decltype推导右值类型为什么实际类型
 
-        PrintType2(b); PrintType2(c); PrintType2(d);
+        volatile const int& tmp_a = var;
+        decltype(tmp_a) e = var; // const volatile int &
+
+        PrintType2(b); PrintType2(c); PrintType2(d); PrintType2(e);
     }
 
-    void testLambda()
+    void testFunciton()
     {
+        std::cout << "\n----------------" << std::endl;
+        std::cout << "decltype-函数推导" << std::endl;
+        // lambda相关
         const int a = 1;
         auto lambda1 = [](const int a, const int b) { const int& c = a; return c; };
         auto lambda2 = [&]() -> decltype(auto) { const int& c = a; return c; }; // 为了避免ub，a写在外面
-        // 返回值是右值，返回类型是const int，decltype(lambda3(1, 2))推导时右值去掉const
+        // 返回值是右值，右值只有类可以携带限定符，变量的限定符会被去掉
         auto lambda3 = [](const int a, const int b) -> decltype(auto) { const int c = a; return c; }; 
+
+
 
         decltype(lambda1(1, 2))  retur1 = lambda1(1, 2);    // int
         decltype(lambda2())  retur2 = lambda2();            // const int&
         decltype(lambda3(1, 2))  retur3 = lambda3(1, 2);    // int
 
         PrintType2(retur1); PrintType2(retur2); PrintType2(retur3);
+
+        std::cout << "函数相关推导" << std::endl;
+        // 首先需要明确，函数返回值通常是一个临时值，也就是纯右值，
+        int x = 0;
+        // 函数相关
+        int func(void);
+        int& func_reference(void);
+        int&& func_right_reference(void);
+        
+        decltype(func()) a1 = 0;    // int
+        decltype(func_reference()) b1 = x;  // int&
+        decltype(func_right_reference()) c1 = 0; // int&&
+        
+        // const 函数相关
+        const int cfunc(void);
+        const int& cfunc_reference(void);
+        const int&& cfunc_right_reference(void);
+        const Foo cfun_class(void);
+
+        decltype(cfunc())               a2 = 0;     // int
+        decltype(cfunc_reference())     b2 = x;     // int&
+        decltype(cfunc_right_reference()) c2 = 0;   // int&&
+        decltype(cfun_class())          ff = Foo(); // 类可以携带限定符
+
+        PrintType2(a1); PrintType2(b1); PrintType2(c1);
+        std::cout << "const函数" << std::endl;
+        PrintType2(a2); PrintType2(b2); PrintType2(c2); PrintType2(ff);
     }
+    
+private:
+    class Foo {};
 };
 
 
 
 _REGISTER(DecltypeTest,
     &DecltypeTest::testReference,
-    &DecltypeTest::testLambda
+    &DecltypeTest::testFunciton
 )
 
 #undef PrintType
