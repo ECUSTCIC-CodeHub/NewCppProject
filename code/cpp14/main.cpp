@@ -1,12 +1,20 @@
-﻿#include "Deduction.hpp"
-#include <iostream>
-#include "Reflect.hpp"
+﻿#include "Deduction.hpp"  
+#include <iostream>  
+#include "Reflect.hpp"  
 
 
-int main()
+int func()
 {
-    system("chcp 65001");
+    return 1;
+}
 
-    TestClass<autoTest>();
-    TestClass<DecltypeTest>();
+auto a = { (func(), 0) };
+
+int main()  
+{  
+   system("chcp 65001");  
+  
+   std::cout << *a.begin();
+   TestClass<autoTest>();  
+   TestClass<DecltypeTest>();  
 }

@@ -10,6 +10,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Reflect.hpp" />
+    <ClInclude Include="include\Class.hpp">
+      <Filter>include</Filter>
+    </ClInclude>
     <ClInclude Include="include\Deduction.hpp">
       <Filter>include</Filter>
     </ClInclude>

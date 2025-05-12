@@ -24,7 +24,7 @@ project("Cpp14")
     location "code/cpp14"
     kind "ConsoleApp"
     language "C++"
-    cppdialect "C++17"
+    cppdialect "C++14"
 
     files {
         "code/cpp14/**.cpp",
